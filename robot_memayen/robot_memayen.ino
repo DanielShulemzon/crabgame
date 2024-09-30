@@ -10,11 +10,11 @@ void i_wanna_go_home_and_then_edge(){
       digitalWrite(motors[i].in2, 0);
 
       serial_printf("Activated pins: %u %u", motors[i].in1, motors[i].in2);
-      delay(SECOND);
+      delay(SECOND_MS);
     }
-    delay(SECOND);
+    delay(SECOND_MS);
     reset_motors();
-    delay(SECOND);
+    delay(SECOND_MS);
   }
 }
 

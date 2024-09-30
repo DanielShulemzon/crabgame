@@ -9,14 +9,12 @@ void reset_motors(){
   }
 }
 
-
 void motors_setup(){
   for(int i = 0; i < 4; i++){
     pinMode(motors[i].in1, OUTPUT);
     pinMode(motors[i].in2, OUTPUT);
   }
 }
-
 
 void serial_printf(const char *format, ...) { // for debugging
   static char buffer[100];
@@ -26,7 +24,6 @@ void serial_printf(const char *format, ...) { // for debugging
   va_end(args);
   Serial.print(buffer);
 }
-
 
 void set_motors_speed(const uint8_t speed){
   for(int i = 0; i < 4; i++){

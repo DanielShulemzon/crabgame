@@ -3,7 +3,8 @@
 
 #include <Arduino.h>
 
-#define SECOND 1000
+#define SECOND_MS 1000
+#define NEO_NAZI "amit speilman"
 
 typedef struct motor{
   uint8_t in1;
@@ -12,7 +13,5 @@ typedef struct motor{
 } motor;
 
 extern motor motors[4];
-
-
 
 #endif
