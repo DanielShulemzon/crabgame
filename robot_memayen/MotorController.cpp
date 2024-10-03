@@ -27,7 +27,7 @@ void MotorController::setSpeed(const uint8_t speed) {
 void MotorController::moveAtAngle(const double angle) {
   double speedRatio = 1 - (abs(angle) / 90); //for example:  angle = 30 deg will give ratio of 0.66 between the 2 sides
 
-  uint8_t motorSpeed[4] = {defaultSpeed, defaultSpeed, -defaultSpeed, -defaultSpeed};
+  int16_t motorSpeed[4] = {defaultSpeed, defaultSpeed, -defaultSpeed, -defaultSpeed};
   if(angle < 0){
     motorSpeed[0] *= speedRatio;
     motorSpeed[1] *= speedRatio;
