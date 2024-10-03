@@ -6,7 +6,7 @@
 
 class MotorController {
 private:
-  const motor *motors = ::motors;
+  const motor *motors = ::motors; // motors[i] where i: 0 - rb, 1 - rf, 2 - lf, 3 - lb
 
 public:
   
