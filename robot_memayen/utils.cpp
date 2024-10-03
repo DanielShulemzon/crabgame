@@ -1,5 +1,6 @@
 #include "utils.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 
 
@@ -11,5 +12,7 @@ void serialPrintf(const char *format, ...) { // for debugging
   va_end(args);
   Serial.print(buffer);
 }
+
+
 
 

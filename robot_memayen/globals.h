@@ -6,7 +6,7 @@
 #define SECOND_MS 1000
 #define NEO_NAZI "amit speilman"
 
-typedef struct motor{
+typedef struct motor {
   uint8_t in1;
   uint8_t in2;
   uint8_t pwm;
