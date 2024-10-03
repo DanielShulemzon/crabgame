@@ -1,6 +1,6 @@
 #include "globals.h"
 
-motor motors[4] = {
+const motor motors[4] = {
   {28, 27, 3},
   {30, 29, 4},
   {24, 23, 5},

@@ -12,6 +12,6 @@ typedef struct motor{
   uint8_t pwm;
 } motor;
 
-extern motor motors[4];
+extern const motor motors[4];
 
-#endif
+#endif 
