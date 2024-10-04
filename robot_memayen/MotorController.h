@@ -9,7 +9,6 @@ private:
   static const uint8_t defaultSpeed = 150;
 
 public:
-  
   MotorController();
 
   void setup();
