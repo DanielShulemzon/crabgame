@@ -1,8 +1,7 @@
 #include "globals.h"
 #include "utils.h"
 #include "MotorController.h"
-#include "PixyClass.h"
-
+#include "Pixy2.h"
 
 MotorController motorController; //handles all 4 wheels like a boss
 
@@ -39,9 +38,6 @@ void driveInFunnyAngle() {
   }
 }
 
-void pixy_schintzelnazi() {
-
-}
 
 void setup() {
   Serial.begin(9600);
