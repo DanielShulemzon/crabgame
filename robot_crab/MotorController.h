@@ -8,7 +8,7 @@
 class MotorController {
 private:
   const motor *motors = ::motors; // motors[i] where i: 0 - rb, 1 - rf, 2 - lf, 3 - lb
-  const uint8_t defaultSpeed = 200;
+  uint8_t defaultSpeed = DEFAULT_SPEED;
 
 public:
   MotorController();

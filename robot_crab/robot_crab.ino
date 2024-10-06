@@ -25,16 +25,13 @@ void testDrive() {
 }
 
 void driveInFunnyAngle() {
+  motorController.setSpeed(150);
   double angle = 45;
   while(true){
-    if(angle == -45) {
-      angle = 45;
-    }
-    else{
-      angle -= 5;
-    }
     motorController.moveAtAngle(angle);
-    delay(100);
+    delay(1000);
+    motorController.moveAtAngle(-angle);
+    delay(1000);
   }
 }
 
@@ -42,7 +39,7 @@ void driveInFunnyAngle() {
 void setup() {
   Serial.begin(9600);
   motorController.setup();
-  testDrive();
+  driveInFunnyAngle();
 }
 
 void loop() {

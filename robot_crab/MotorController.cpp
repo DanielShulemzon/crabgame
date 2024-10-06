@@ -22,16 +22,17 @@ void MotorController::setSpeed(const uint8_t speed) {
   for(int i = 0; i < 4; i++){
     analogWrite(motors[i].pwm, speed);
   }
+  defaultSpeed = speed;
 }
 
 void MotorController::moveAtAngle(const double angle, uint8_t dir = 0) { // dir is 0 - straight, 1 - right, 2 - back, 3 - left.
-  double angleRad = angle / (180) * MATH_PI;
+  double angleRad = (angle / 180) * MATH_PI;
 
   int16_t motorSpeed[4] = {0}; //the speed going to be inputed into each motor
-  motorSpeed[(0 + dir) % 4] = - sin(MATH_PI/4 + angle) * DEFAULT_SPEED;
-  motorSpeed[(1 + dir) % 4] = - sin(MATH_PI/4 - angle) * DEFAULT_SPEED;
-  motorSpeed[(2 + dir) % 4] =  sin(MATH_PI/4 + angle) * DEFAULT_SPEED;
-  motorSpeed[(3 + dir) % 4] =  sin(MATH_PI/4 - angle) * DEFAULT_SPEED;
+  motorSpeed[(0 + dir) % 4] = - sin(MATH_PI/4 + angleRad) * defaultSpeed;
+  motorSpeed[(1 + dir) % 4] =  sin(MATH_PI/4 - angleRad) * defaultSpeed;
+  motorSpeed[(2 + dir) % 4] =  sin(MATH_PI/4 + angleRad) * defaultSpeed;
+  motorSpeed[(3 + dir) % 4] = - sin(MATH_PI/4 - angleRad) * defaultSpeed;
 
   // update motors
   for(int i = 0; i < 4; i++){
