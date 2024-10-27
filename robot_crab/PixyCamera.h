@@ -1,16 +1,19 @@
-// #ifndef _PIXYCAMERA_H
-// #define _PIXYCAMERA_H
+#ifndef _PIXYCAMERA_H
+#define _PIXYCAMERA_H
 
-// #include <SPI.h>
-// #include <Pixy2.h>
-// #include "globals.h"
+#define CAM_PIXELS 316
+#define BOX_OG_PIXELS 10
 
-// namespace PixyCamera {
+#include <SPI.h>
+#include <Pixy2.h>
+#include "globals.h"
 
-//   double get_angle(Block *block);
+namespace PixyCamera {
 
-//   double get_distance(Block *block);
+  double getAngle(Block *block);
 
-// }
+  double getDistance(Block *block);
 
-// #endif
+}
+
+#endif

@@ -1,10 +1,11 @@
 #include "globals.h"
 #include "utils.h"
 #include "MotorController.h"
-#include "Pixy2.h"
+#include "PixyCamera.h"
+#include "LeadScrewStepper.h"
 
 MotorController motorController; //handles all 4 wheels like a boss
-
+LeadScrewStepper stepperController(8, 9);
 Pixy2 pixy;
 
 
@@ -35,10 +36,20 @@ void driveInFunnyAngle() {
   }
 }
 
+void StepperBoundriesChecker() {
+  while(true) {
+    stepperController.stepper.runToNewPosition(MAX_STEPS);
+    delay(100);
+    stepperController.stepper.runToNewPosition(MIN_STEPS);
+    delay(100);
+  }
+}
+
 
 void setup() {
   Serial.begin(9600);
   motorController.setup();
+
   driveInFunnyAngle();
 }
 
