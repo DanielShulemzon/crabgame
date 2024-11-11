@@ -1,30 +1,29 @@
-#ifndef _LEADSCREWSTEPPER_H
-#define _LEADSCREWSTEPPER_H
+#pragma once
 
 #define MAX_STEPS 1000
 #define MIN_STEPS -500
 
 #include "globals.h"
 #include <AccelStepper.h>
+#include <Servo.h>
 
-class LeadScrewStepper {
+class LeadScrewStepper 
+{
 private:
-  uint16_t stepsPerRevolution = 2048;
-  uint16_t rpm = 500;
+  AccelStepper m_Stepper;
+  Servo m_Servo;
 
+  uint16_t m_Rps = 500;
 
 public:
-  AccelStepper stepper;
+  LeadScrewStepper(uint8_t stepPin, uint8_t dirPin, uint8_t serPin);
 
-  LeadScrewStepper(uint8_t stepPin, uint8_t dirPin);
+  void reset() const;
 
-  void reset();
+  bool runAndCheck() const;
 
-  bool runAndCheck();
+  void checkBoundries() const;
+
+  void servoChecker() const;
   
 };
-
-
-
-
-#endif

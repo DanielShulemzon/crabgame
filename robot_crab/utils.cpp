@@ -4,7 +4,8 @@
 #include <stdarg.h>
 
 
-void serialPrintf(const char *format, ...) { // for debugging
+void serialPrintf(const char *format, ...) 
+{ // for debugging
   static char buffer[100];
   va_list args;
   

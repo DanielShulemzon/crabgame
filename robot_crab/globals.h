@@ -1,5 +1,4 @@
-#ifndef _GLOBALS_H
-#define _GLOBALS_H
+#pragma once
 
 #include <Arduino.h>
 
@@ -10,12 +9,11 @@
 
 #define LEAD_SCREW_SERVO_PIN 9
 
-typedef struct motor {
+struct motor 
+{
   uint8_t in1;
   uint8_t in2;
   uint8_t pwm;
-} motor;
+};
 
 extern const motor motors[4];
-
-#endif 

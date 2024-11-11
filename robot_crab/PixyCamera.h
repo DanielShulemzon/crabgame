@@ -1,5 +1,4 @@
-#ifndef _PIXYCAMERA_H
-#define _PIXYCAMERA_H
+#pragma once
 
 #define CAM_PIXELS 316
 #define BOX_OG_PIXELS 10
@@ -8,12 +7,11 @@
 #include <Pixy2.h>
 #include "globals.h"
 
-namespace PixyCamera {
+namespace PixyCamera 
+{
 
   double getAngle(Block *block);
 
   double getDistance(Block *block);
 
 }
-
-#endif
