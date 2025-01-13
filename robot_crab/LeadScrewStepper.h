@@ -1,7 +1,7 @@
 #pragma once
 
-#define MAX_STEPS 1000
-#define MIN_STEPS -500
+#define START_POS 0
+#define MAX_POS -2000
 
 #include "globals.h"
 #include <AccelStepper.h>
@@ -10,14 +10,16 @@
 class LeadScrewStepper 
 {
 private:
-  AccelStepper m_Stepper;
-  Servo m_Servo;
+  AccelStepper m_LeftStepper, m_RightStepper;
 
-  uint16_t m_Rps = 500;
+  Servo m_LeftServo, m_RightServo;
+
+  uint16_t m_Rps = 200;
 
 public:
-  LeadScrewStepper(uint8_t stepPin, uint8_t dirPin, uint8_t serPin);
-
+  // left: 1, right: 2.
+  LeadScrewStepper(uint8_t dirPin1, uint8_t stepPin1, uint8_t dirPin2,
+                     uint8_t stepPin2, uint8_t serPin1, uint8_t serPin2);
   void reset() const;
 
   bool runAndCheck() const;

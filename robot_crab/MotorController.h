@@ -8,7 +8,7 @@
 class MotorController 
 {
 private:
-  const motor *m_Motors = ::motors; // motors[i] where i: 0 - rb, 1 - rf, 2 - lf, 3 - lb
+  const motor *m_Motors = ::motors; // motors[i] where i: 0 - lb, 1 - rb, 2 - rf, 3 - lf
   uint8_t m_BaseSpeed = DEFAULT_SPEED;
   uint8_t m_SpinSpeed = DEFAULT_SPEEN_SPEED;
 
@@ -25,7 +25,7 @@ public:
 
   void spinAroundObj(const int radius = 20) const;
 
-  void MotorController::checkWheels() const;
+  void checkWheels() const;
 
 };
 

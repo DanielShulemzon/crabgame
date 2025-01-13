@@ -6,6 +6,7 @@ MotorController::MotorController()
 {
   setSpeed(m_BaseSpeed);
   setup();
+  resetMotors();
 }
 
 void MotorController::setup() const
@@ -39,10 +40,10 @@ void MotorController::moveAtAngle(const double angle, uint8_t dir = 0) const
   double angleRad = (angle / 180) * MATH_PI;
 
   int16_t motorSpeed[4] = {0}; //the speed going to be inputed into each motor
-  motorSpeed[(0 + dir) % 4] = - sin(MATH_PI/4 + angleRad) * m_BaseSpeed;
-  motorSpeed[(1 + dir) % 4] =  sin(MATH_PI/4 - angleRad) * m_BaseSpeed;
-  motorSpeed[(2 + dir) % 4] =  sin(MATH_PI/4 + angleRad) * m_BaseSpeed;
-  motorSpeed[(3 + dir) % 4] = - sin(MATH_PI/4 - angleRad) * m_BaseSpeed;
+  motorSpeed[(0 + dir) % 4] = - sin(MATH_PI/4 - angleRad) * m_BaseSpeed;
+  motorSpeed[(1 + dir) % 4] =  sin(MATH_PI/4 + angleRad) * m_BaseSpeed;
+  motorSpeed[(2 + dir) % 4] =  sin(MATH_PI/4 - angleRad) * m_BaseSpeed;
+  motorSpeed[(3 + dir) % 4] = - sin(MATH_PI/4 + angleRad) * m_BaseSpeed;
 
   // update motors
   for(int i = 0; i < 4; i++)
@@ -57,14 +58,14 @@ void MotorController::moveAtAngle(const double angle, uint8_t dir = 0) const
 void MotorController::spinAroundObj(const int radius = 20) const
 {
   // default radius of 20 cms, can be changed.
-  int speedDx = 40 - radius;
+  int speedDx = 70 - radius;
   int16_t motorSpeed[4] = {0}; //the speed going to be inputed into each motor
 
   // default move right values (can see further explanation at MotorController::moveAtAngle) plus moment.
-  motorSpeed[3] = - (m_SpinSpeed) - speedDx;
-  motorSpeed[0] =  (m_SpinSpeed) - speedDx; // if big values i mad ):<
-  motorSpeed[1] =  (m_SpinSpeed) - speedDx;
-  motorSpeed[2] = - (m_SpinSpeed) - speedDx;
+  motorSpeed[3] = - (m_SpinSpeed) + speedDx;
+  motorSpeed[0] =  (m_SpinSpeed) + speedDx; // if big values i mad ):<
+  motorSpeed[1] =  (m_SpinSpeed) + speedDx;
+  motorSpeed[2] = - (m_SpinSpeed) + speedDx;
 
   // update motors
   for(int i = 0; i < 4; i++)

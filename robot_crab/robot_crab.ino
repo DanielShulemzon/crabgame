@@ -5,7 +5,7 @@
 #include "LeadScrewStepper.h"
 
 MotorController motorController; // handles all 4 wheels like a boss
-LeadScrewStepper stepperController(8, 9, 10); // handles my GalvenizedSquaredLeadScrew like a bosch.
+LeadScrewStepper stepperController(8, 9, 10, 11, 12, 13); // handles my GalvenizedSquaredLeadScrew like a bosch.
 Pixy2 pixy;
 
 
@@ -22,12 +22,13 @@ void driveInFunnyAngle()
   }
 }
 
-
-void setup() 
+void setup()
 {
   Serial.begin(9600);
 
-  // driveInFunnyAngle();
+  // motorController.spinAroundObj();
+  // motorController.spinAroundObj();
+  stepperController.checkBoundries();
 }
 
 void loop() 
