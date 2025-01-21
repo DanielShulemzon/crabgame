@@ -5,7 +5,7 @@
 #include "LeadScrewStepper.h"
 
 MotorController motorController; // handles all 4 wheels like a boss
-LeadScrewStepper stepperController(8, 9, 10, 11, 12, 13); // handles my GalvenizedSquaredLeadScrew like a bosch.
+LeadScrewStepper stepperController(leftStepper, rightStepper, 12, 13); // handles my GalvenizedSquaredLeadScrew like a bosch.
 Pixy2 pixy;
 
 

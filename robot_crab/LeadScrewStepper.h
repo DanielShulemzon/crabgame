@@ -17,9 +17,7 @@ private:
   uint16_t m_Rps = 200;
 
 public:
-  // left: 1, right: 2.
-  LeadScrewStepper(uint8_t dirPin1, uint8_t stepPin1, uint8_t dirPin2,
-                     uint8_t stepPin2, uint8_t serPin1, uint8_t serPin2);
+  LeadScrewStepper(const stepperLS& leftStepper, const stepperLS& rightStepper, uint8_t serPin1, uint8_t serPin2);
   void reset() const;
 
   bool runAndCheck() const;

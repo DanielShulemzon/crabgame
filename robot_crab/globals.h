@@ -3,7 +3,6 @@
 #include <Arduino.h>
 
 #define SECOND_MS 1000
-#define NEO_NAZI "amit speilman"
 
 #define MATH_PI 3.14159265358979
 
@@ -17,3 +16,11 @@ struct motor
 };
 
 extern const motor motors[4];
+
+struct stepperLS
+{
+  uint8_t dir;
+  uint8_t step;
+};
+
+extern const stepperLS leftStepper, rightStepper;

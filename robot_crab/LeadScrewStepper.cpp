@@ -1,10 +1,10 @@
 #include "LeadScrewStepper.h"
 
 
-LeadScrewStepper::LeadScrewStepper(uint8_t dirPin1, uint8_t stepPin1, uint8_t dirPin2,
-                     uint8_t stepPin2, uint8_t serPin1, uint8_t serPin2) :
-      m_LeftStepper(AccelStepper::DRIVER, stepPin1, dirPin1),
-     m_RightStepper(AccelStepper::DRIVER, stepPin2, dirPin2) {
+LeadScrewStepper::LeadScrewStepper(const stepperLS& leftStepper, const stepperLS& rightStepper,
+                                    uint8_t serPin1, uint8_t serPin2) :
+      m_LeftStepper(AccelStepper::DRIVER, leftStepper.step, leftStepper.dir),
+     m_RightStepper(AccelStepper::DRIVER, rightStepper.step, rightStepper.dir) {
   m_LeftStepper.setCurrentPosition(START_POS);
   m_LeftStepper.setMaxSpeed(1000);
   m_LeftStepper.setSpeed(m_Rps);
