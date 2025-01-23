@@ -1,7 +1,6 @@
 #include "globals.h"
 
-extern const motor motors[4];
-extern const stepperLS leftStepper, rightStepper;
+// this file contains all pins, I like.
 
 const motor motors[4] = {
   {27, 26, 3}, // left back

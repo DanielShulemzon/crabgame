@@ -10,5 +10,4 @@ double PixyCamera::getDistance(Block *block)
 {
   double screenWidth = (double) CAM_PIXELS / block->m_width * BOX_OG_PIXELS;
   return screenWidth / 2 * sqrt(3);
-
 }

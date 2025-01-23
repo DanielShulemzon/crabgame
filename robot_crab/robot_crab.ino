@@ -9,7 +9,7 @@ LeadScrewStepper stepperController(leftStepper, rightStepper, 12, 13); // handle
 Pixy2 pixy;
 
 
-void driveInFunnyAngle() 
+void driveInFunnyAngle()
 {
   motorController.setSpeed(150);
   double angle = 45;

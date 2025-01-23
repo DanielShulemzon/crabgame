@@ -14,7 +14,3 @@ void serialPrintf(const char *format, ...)
   va_end(args);
   Serial.print(buffer);
 }
-
-
-
-

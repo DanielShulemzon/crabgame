@@ -6,8 +6,6 @@
 
 #define MATH_PI 3.14159265358979
 
-#define LEAD_SCREW_SERVO_PIN 9
-
 struct motor 
 {
   uint8_t in1;

@@ -9,9 +9,7 @@
 
 namespace PixyCamera 
 {
-
   double getAngle(Block *block);
 
   double getDistance(Block *block);
-
 }
