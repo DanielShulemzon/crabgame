@@ -3,14 +3,19 @@
 #define START_POS 0
 #define MAX_POS -2000
 
+#define RIGHT_SERVO_START 90
+#define LEFT_SERVO_START 80
+#define RIGHT_SERVO_END 45
+#define R2L_CONVERT(deg) (170 - deg) // 10 degrees for making them parallel
+
 #include "globals.h"
 #include <AccelStepper.h>
-#include <Servo.h>
+#include <Servo.h> 
 
 class LeadScrewStepper 
 {
 private:
-  AccelStepper m_LeftStepper, m_RightStepper;
+  AccelStepper m_RightStepper, m_LeftStepper;
 
   Servo m_LeftServo, m_RightServo;
 
@@ -24,6 +29,6 @@ public:
 
   void checkBoundries() const;
 
-  void servoChecker() const;
+  void checkServos() const;
   
 };

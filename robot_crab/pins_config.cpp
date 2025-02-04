@@ -9,5 +9,6 @@ const motor motors[4] = {
   {25, 24, 6} // left front
 };
 
+const stepperLS rightStepper = {8, 9}, leftStepper = {10, 11};
 
-const stepperLS leftStepper = {8, 9}, rightStepper = {10, 11};
+const uint8_t leftServoPin = 12, rightServoPin = 13;

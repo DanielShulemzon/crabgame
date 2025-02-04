@@ -1,10 +1,12 @@
 #include "LeadScrewStepper.h"
+#include "utils.h"
 
 
 LeadScrewStepper::LeadScrewStepper(const stepperLS& leftStepper, const stepperLS& rightStepper,
-                                    uint8_t serPin1, uint8_t serPin2) :
-      m_LeftStepper(AccelStepper::DRIVER, leftStepper.step, leftStepper.dir),
-     m_RightStepper(AccelStepper::DRIVER, rightStepper.step, rightStepper.dir) {
+                                    uint8_t leftServoPin, uint8_t rightServoPin) :
+      m_RightStepper(AccelStepper::DRIVER, leftStepper.step, leftStepper.dir),
+     m_LeftStepper(AccelStepper::DRIVER, rightStepper.step, rightStepper.dir) {
+
   m_LeftStepper.setCurrentPosition(START_POS);
   m_LeftStepper.setMaxSpeed(1000);
   m_LeftStepper.setSpeed(m_Rps);
@@ -15,8 +17,12 @@ LeadScrewStepper::LeadScrewStepper(const stepperLS& leftStepper, const stepperLS
   m_RightStepper.setSpeed(m_Rps);
   m_RightStepper.setAcceleration(100);
 
-  m_LeftServo.attach(serPin1);
-  m_RightServo.attach(serPin2);
+  m_LeftServo.attach(leftServoPin);
+  m_RightServo.attach(rightServoPin);
+
+  m_LeftServo.write(LEFT_SERVO_START);
+  m_RightServo.write(RIGHT_SERVO_START);
+  delay(1000);
 }
 
 void LeadScrewStepper::reset() const 
@@ -26,7 +32,7 @@ void LeadScrewStepper::reset() const
     m_RightStepper.moveTo(START_POS);
 
     // fizzbeen, win.
-    while (m_LeftStepper.isRunning() || m_RightStepper.isRunning()) 
+    while (m_RightStepper.isRunning() || m_LeftStepper.isRunning()) 
     {
         // Update both motors
         m_LeftStepper.run();
@@ -44,7 +50,7 @@ bool LeadScrewStepper::runAndCheck() const
   // if out of boundries, return false.
   m_LeftStepper.run();
   m_RightStepper.run();
-  long currentSteps = m_LeftStepper.currentPosition(); // they are totally parallel.
+  long currentSteps = m_RightStepper.currentPosition(); // they are totally parallel.
   if(currentSteps >= MAX_POS || currentSteps <= START_POS)
   {
     //PANIC
@@ -69,15 +75,24 @@ void LeadScrewStepper::checkBoundries() const
   }
 }
 
-void LeadScrewStepper::servoChecker() const
+void LeadScrewStepper::checkServos() const
 { 
   while (true)
   { 
-    m_LeftServo.write(0);
-    m_RightServo.write(0);
+    for(int pos = 90; pos >= 45; pos--) {
+      m_LeftServo.write(R2L_CONVERT(pos));
+      m_RightServo.write(pos);
+      delay(10);
+    }
+
     delay(1000);
-    m_LeftServo.write(45);
-    m_RightServo.write(45);
+
+    for(int pos = 45; pos <= 90; pos++) {
+      m_LeftServo.write(R2L_CONVERT(pos));
+      m_RightServo.write(pos);
+      delay(10);
+    }
+
     delay(1000);
   }
 }

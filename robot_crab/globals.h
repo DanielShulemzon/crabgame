@@ -22,3 +22,5 @@ struct stepperLS
 };
 
 extern const stepperLS leftStepper, rightStepper;
+
+extern const uint8_t leftServoPin, rightServoPin;
