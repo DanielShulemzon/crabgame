@@ -2,6 +2,7 @@
 
 #define START_POS 0
 #define MAX_POS -2000
+#define STEPS_PER_REVOLUTION 200
 
 #define RIGHT_SERVO_START 90
 #define LEFT_SERVO_START 80
@@ -27,8 +28,19 @@ public:
 
   bool runAndCheck() const;
 
+  bool runUntilFinished() const;
+
+  bool runSpeedToPositionAndCheck() const;
+
+  bool moveTo(const long pos) const;
+
+  void pickUpObj() const;
+
+  void putDownObj() const;
+
   void checkBoundries() const;
 
   void checkServos() const;
-  
+
+  void checkObjHandle() const;  
 };

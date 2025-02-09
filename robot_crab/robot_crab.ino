@@ -9,28 +9,15 @@ LeadScrewStepper* stepperController; // ptr to a stack allocated block for late 
 Pixy2 pixy;
 
 
-void driveInFunnyAngle()
-{
-  motorController.setSpeed(150);
-  double angle = 45;
-  while(true)
-  {
-    motorController.moveAtAngle(angle);
-    delay(1000);
-    motorController.moveAtAngle(-angle);
-    delay(1000);
-  }
-}
-
 void setup()
 {
   Serial.begin(9600);
   stepperController = &LeadScrewStepper(leftStepper, rightStepper, leftServoPin, rightServoPin);
   
-  stepperController->checkServos();
+  stepperController->checkObjHandle();
 }
 
 void loop() 
 { 
-
+  
 }

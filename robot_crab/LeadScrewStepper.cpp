@@ -51,7 +51,7 @@ bool LeadScrewStepper::runAndCheck() const
   m_LeftStepper.run();
   m_RightStepper.run();
   long currentSteps = m_RightStepper.currentPosition(); // they are totally parallel.
-  if(currentSteps >= MAX_POS || currentSteps <= START_POS)
+  if(currentSteps < MAX_POS || currentSteps > START_POS)
   {
     //PANIC
     reset();
@@ -60,6 +60,63 @@ bool LeadScrewStepper::runAndCheck() const
   return true;
 }
 
+bool LeadScrewStepper::runSpeedToPositionAndCheck() const 
+{
+  // if out of boundries, return false.
+  m_LeftStepper.runSpeedToPosition();
+  m_RightStepper.runSpeedToPosition();
+  long currentSteps = m_RightStepper.currentPosition(); // they are totally parallel.
+  if(currentSteps < MAX_POS || currentSteps > START_POS)
+  {
+    //PANIC
+    reset();
+    return false;
+  }
+  return true;
+}
+
+bool LeadScrewStepper::runUntilFinished() const {
+  while(m_LeftStepper.distanceToGo() != 0 && m_RightStepper.distanceToGo() != 0) {
+    if(!runAndCheck()) {
+      serialPrintf("You stupid n-\n");
+      return false;
+    }
+  }
+  return true;
+}
+
+bool LeadScrewStepper::moveTo(const long pos) const {
+  m_LeftStepper.moveTo(pos);
+  m_RightStepper.moveTo(pos);
+}
+
+void LeadScrewStepper::pickUpObj() const {
+  m_LeftStepper.move(STEPS_PER_REVOLUTION / 8);
+  m_RightStepper.move(STEPS_PER_REVOLUTION / 8);
+  for(int pos = 90; pos >= 45; pos--) {
+    m_LeftServo.write(R2L_CONVERT(pos));
+    m_RightServo.write(pos);
+    if(!runAndCheck()) {
+      serialPrintf("You stupid n-\n");
+    }
+    delay(10);
+  }
+  runUntilFinished();
+}
+
+void LeadScrewStepper::putDownObj() const {
+  m_LeftStepper.move(-(STEPS_PER_REVOLUTION / 8));
+  m_RightStepper.move(-(STEPS_PER_REVOLUTION / 8));
+  for(int pos = 45; pos <= 90; pos++) {
+    m_LeftServo.write(R2L_CONVERT(pos));
+    m_RightServo.write(pos);
+    if(!runAndCheck()) {
+      serialPrintf("You stupid n-\n");
+    }
+    delay(10);
+  }
+  runUntilFinished();
+}
 
 void LeadScrewStepper::checkBoundries() const
 {
@@ -95,4 +152,13 @@ void LeadScrewStepper::checkServos() const
 
     delay(1000);
   }
+}
+
+void LeadScrewStepper::checkObjHandle() const {
+  moveTo(-1000);
+  runUntilFinished();
+  delay(1000);
+  pickUpObj();
+  delay(1000);
+  putDownObj();
 }
