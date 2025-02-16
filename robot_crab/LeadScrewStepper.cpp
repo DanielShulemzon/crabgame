@@ -75,43 +75,64 @@ bool LeadScrewStepper::runSpeedToPositionAndCheck() const
   return true;
 }
 
-bool LeadScrewStepper::runUntilFinished() const {
-  while(m_LeftStepper.distanceToGo() != 0 && m_RightStepper.distanceToGo() != 0) {
-    if(!runAndCheck()) {
-      serialPrintf("You stupid n-\n");
+bool LeadScrewStepper::runUntilFinished() const
+{
+  while(m_LeftStepper.distanceToGo() != 0 && m_RightStepper.distanceToGo() != 0)
+  {
+    if(!runAndCheck())
+    {
+      Utils::serialPrintf("You stupid n-\n");
       return false;
     }
   }
   return true;
 }
 
-bool LeadScrewStepper::moveTo(const long pos) const {
+bool LeadScrewStepper::moveTo(const long pos) const
+{
   m_LeftStepper.moveTo(pos);
   m_RightStepper.moveTo(pos);
 }
 
-void LeadScrewStepper::pickUpObj() const {
+bool LeadScrewStepper::closeOnObj() const
+{
+  m_LeftStepper.move(MAX_POS);
+  m_RightStepper.move(MAX_POS);
+  while (Utils::getFsrNewton() < 10)
+  {
+    if (!runAndCheck()) return false;
+  }
+  return true;
+}
+
+void LeadScrewStepper::pickUpObj() const
+{
   m_LeftStepper.move(STEPS_PER_REVOLUTION / 8);
   m_RightStepper.move(STEPS_PER_REVOLUTION / 8);
-  for(int pos = 90; pos >= 45; pos--) {
+  for (int pos = 90; pos >= 45; pos--)
+  {
     m_LeftServo.write(R2L_CONVERT(pos));
     m_RightServo.write(pos);
-    if(!runAndCheck()) {
-      serialPrintf("You stupid n-\n");
+    if(!runAndCheck())
+    {
+      Utils::serialPrintf("You stupid n-\n");
     }
     delay(10);
   }
   runUntilFinished();
 }
 
-void LeadScrewStepper::putDownObj() const {
+void LeadScrewStepper::putDownObj() const
+{
   m_LeftStepper.move(-(STEPS_PER_REVOLUTION / 8));
   m_RightStepper.move(-(STEPS_PER_REVOLUTION / 8));
-  for(int pos = 45; pos <= 90; pos++) {
+  for (int pos = 45; pos <= 90; pos++)
+  {
     m_LeftServo.write(R2L_CONVERT(pos));
     m_RightServo.write(pos);
-    if(!runAndCheck()) {
-      serialPrintf("You stupid n-\n");
+    if(!runAndCheck())
+    {
+      Utils::serialPrintf("You stupid n-\n");
     }
     delay(10);
   }
@@ -120,7 +141,8 @@ void LeadScrewStepper::putDownObj() const {
 
 void LeadScrewStepper::checkBoundries() const
 {
-  while(true) {
+  while(true)
+  {
     m_LeftStepper.runToNewPosition(MAX_POS);
     delay(1000);
     m_LeftStepper.runToNewPosition(START_POS);
@@ -136,7 +158,8 @@ void LeadScrewStepper::checkServos() const
 { 
   while (true)
   { 
-    for(int pos = 90; pos >= 45; pos--) {
+    for(int pos = 90; pos >= 45; pos--)
+    {
       m_LeftServo.write(R2L_CONVERT(pos));
       m_RightServo.write(pos);
       delay(10);
@@ -144,7 +167,8 @@ void LeadScrewStepper::checkServos() const
 
     delay(1000);
 
-    for(int pos = 45; pos <= 90; pos++) {
+    for(int pos = 45; pos <= 90; pos++)
+    {
       m_LeftServo.write(R2L_CONVERT(pos));
       m_RightServo.write(pos);
       delay(10);
@@ -154,7 +178,8 @@ void LeadScrewStepper::checkServos() const
   }
 }
 
-void LeadScrewStepper::checkObjHandle() const {
+void LeadScrewStepper::checkObjHandle() const
+{
   moveTo(-1000);
   runUntilFinished();
   delay(1000);

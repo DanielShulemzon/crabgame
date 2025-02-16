@@ -2,4 +2,8 @@
 
 #include "globals.h"
 
-void serialPrintf(const char *format, ...);
+namespace Utils {
+  void serialPrintf(const char *format, ...);
+
+  int getFsrNewton();
+}

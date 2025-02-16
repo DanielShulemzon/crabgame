@@ -12,3 +12,5 @@ const motor motors[4] = {
 const stepperLS rightStepper = {8, 9}, leftStepper = {10, 11};
 
 const uint8_t leftServoPin = 12, rightServoPin = 13;
+
+const uint8_t fsrPin = A0;

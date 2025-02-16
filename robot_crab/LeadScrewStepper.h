@@ -15,8 +15,9 @@
 
 class LeadScrewStepper 
 {
-private:
+public:
   AccelStepper m_RightStepper, m_LeftStepper;
+private:
 
   Servo m_LeftServo, m_RightServo;
 
@@ -33,6 +34,8 @@ public:
   bool runSpeedToPositionAndCheck() const;
 
   bool moveTo(const long pos) const;
+
+  bool closeOnObj() const;
 
   void pickUpObj() const;
 
