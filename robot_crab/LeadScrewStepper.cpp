@@ -96,11 +96,13 @@ bool LeadScrewStepper::moveTo(const long pos) const
 
 bool LeadScrewStepper::closeOnObj() const
 {
-  m_LeftStepper.move(MAX_POS);
-  m_RightStepper.move(MAX_POS);
+  moveTo(MAX_POS);
+  Utils::serialPrintf("sensor shows: %d\n", Utils::getFsrNewton());
   while (Utils::getFsrNewton() < 10)
   {
+    Utils::serialPrintf("sensor shows: %d\n", Utils::getFsrNewton());
     if (!runAndCheck()) return false;
+    delay(10);
   }
   return true;
 }

@@ -14,10 +14,12 @@ void setup()
   Serial.begin(9600);
   stepperController = &LeadScrewStepper(leftStepper, rightStepper, leftServoPin, rightServoPin);
   
-  stepperController->checkObjHandle();
+  Utils::serialPrintf("entering...");
+  stepperController->closeOnObj();
 }
 
 void loop() 
 { 
-  
+  stepperController->closeOnObj();
+  Serial.println("exited ");
 }
