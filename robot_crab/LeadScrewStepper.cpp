@@ -4,8 +4,8 @@
 
 LeadScrewStepper::LeadScrewStepper(const stepperLS& leftStepper, const stepperLS& rightStepper,
                                     uint8_t leftServoPin, uint8_t rightServoPin) :
-      m_RightStepper(AccelStepper::DRIVER, leftStepper.step, leftStepper.dir),
-     m_LeftStepper(AccelStepper::DRIVER, rightStepper.step, rightStepper.dir) {
+      m_LeftStepper(AccelStepper::DRIVER, leftStepper.step, leftStepper.dir),
+     m_RightStepper(AccelStepper::DRIVER, rightStepper.step, rightStepper.dir) {
 
   m_LeftStepper.setCurrentPosition(START_POS);
   m_LeftStepper.setMaxSpeed(1000);
@@ -50,8 +50,9 @@ bool LeadScrewStepper::runAndCheck() const
   // if out of boundries, return false.
   m_LeftStepper.run();
   m_RightStepper.run();
-  long currentSteps = m_RightStepper.currentPosition(); // they are totally parallel.
-  if(currentSteps < MAX_POS || currentSteps > START_POS)
+  long right = m_RightStepper.currentPosition();
+  long left = m_LeftStepper.currentPosition();
+  if(right < MAX_POS || right > START_POS || left < MAX_POS || left > START_POS)
   {
     //PANIC
     reset();
@@ -96,15 +97,18 @@ bool LeadScrewStepper::moveTo(const long pos) const
 
 bool LeadScrewStepper::closeOnObj() const
 {
+  int read;
   moveTo(MAX_POS);
-  Utils::serialPrintf("sensor shows: %d\n", Utils::getFsrNewton());
-  while (Utils::getFsrNewton() < 10)
+  while (m_LeftStepper.isRunning() || m_RightStepper.isRunning())
   {
-    Utils::serialPrintf("sensor shows: %d\n", Utils::getFsrNewton());
-    if (!runAndCheck()) return false;
-    delay(10);
+    read = Utils::getFsrNewton();
+    // Utils::serialPrintf("1: %d 2: %d, also 2 moves to: %d\n", m_LeftStepper.currentPosition(), m_RightStepper.currentPosition(), m_LeftStepper.targetPosition());
+    if (!runAndCheck() || read >= 10) break;
+    delay(5);
   }
-  return true;
+  m_LeftStepper.setSpeed(m_Rps);
+  m_RightStepper.setSpeed(m_Rps);
+  return read >= 10;
 }
 
 void LeadScrewStepper::pickUpObj() const

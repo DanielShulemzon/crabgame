@@ -5,45 +5,38 @@
 
 
 void Utils::serialPrintf(const char *format, ...) 
-{ // for debugging
-  static char buffer[100]; // one threaded so whatever
+{
+  static char buffer[100]; // good
   va_list args;
   
   va_start(args, format);
   vsnprintf(buffer, sizeof(buffer), format, args);
   va_end(args);
+  
   Serial.print(buffer);
 }
 
 int Utils::getFsrNewton()
 {
-  static int fsrReading = 0;
-  static int fsrVoltage = 0;
-  static unsigned long fsrResistance = 0;
-  static unsigned long fsrConductance = 0;
+  int fsrReading = analogRead(fsrPin);
+  int fsrVoltage = map(fsrReading, 0, 1023, 0, 5000);
   
-  fsrReading = analogRead(fsrPin);
+  if (fsrVoltage == 0) return 0;  // No pressure detected
   
-  // Map the analog reading (0-1023) to voltage (0-5000mV)
-  fsrVoltage = map(fsrReading, 0, 1023, 0, 5000);
+  // Use float to avoid integer division truncation
+  float fsrResistance = (5000.0f - fsrVoltage) * 10000.0f / fsrVoltage;
   
-  if (fsrVoltage == 0) {
-    return 0;  // No pressure detected
+  // Calculate conductance in micromhos
+  float fsrConductance = 1000000.0f / fsrResistance;
+
+  // Calculate force based on the conductance
+  float fsrForce;
+  if (fsrConductance <= 1000) {
+    fsrForce = fsrConductance / 80.0f;
   } else {
-    // Calculate the FSR resistance based on the voltage
-    fsrResistance = (5000 - fsrVoltage) * 10000 / fsrVoltage;
-    
-    // Calculate the conductance in micromhos (inverse of resistance)
-    fsrConductance = 1000000 / fsrResistance;
-    
-    // Use the guide to approximate force
-    long fsrForce;
-    if (fsrConductance <= 1000) {
-      fsrForce = fsrConductance / 80;
-    } else {
-      fsrForce = (fsrConductance - 1000) / 30;
-    }
-    
-    return fsrForce;
+    fsrForce = (fsrConductance - 1000.0f) / 30.0f;
   }
+
+  return (int)fsrForce;  // Cast to int if you need integer return
 }
+
