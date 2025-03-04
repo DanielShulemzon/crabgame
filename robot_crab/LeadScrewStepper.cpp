@@ -9,13 +9,17 @@ LeadScrewStepper::LeadScrewStepper(const stepperLS& leftStepper, const stepperLS
 
   m_LeftStepper.setCurrentPosition(START_POS);
   m_LeftStepper.setMaxSpeed(1000);
+  m_LeftStepper.setAcceleration(500);
   m_LeftStepper.setSpeed(m_Rps);
-  m_LeftStepper.setAcceleration(100);
 
   m_RightStepper.setCurrentPosition(START_POS);
   m_RightStepper.setMaxSpeed(1000);
+  m_RightStepper.setAcceleration(500);
   m_RightStepper.setSpeed(m_Rps);
-  m_RightStepper.setAcceleration(100);
+
+  m_Steppers = MultiStepper();
+  m_Steppers.addStepper(m_LeftStepper);
+  m_Steppers.addStepper(m_RightStepper);
 
   m_LeftServo.attach(leftServoPin);
   m_RightServo.attach(rightServoPin);
@@ -23,33 +27,22 @@ LeadScrewStepper::LeadScrewStepper(const stepperLS& leftStepper, const stepperLS
   m_LeftServo.write(LEFT_SERVO_START);
   m_RightServo.write(RIGHT_SERVO_START);
   delay(1000);
+
 }
 
 void LeadScrewStepper::reset() const 
 {
     // Start moving both motors to the starting position without blocking
-    m_LeftStepper.moveTo(START_POS);
-    m_RightStepper.moveTo(START_POS);
-
-    // fizzbeen, win.
-    while (m_RightStepper.isRunning() || m_LeftStepper.isRunning()) 
-    {
-        // Update both motors
-        m_LeftStepper.run();
-        m_RightStepper.run();
-
-        // Small delay so motors won't combust.
-        delay(10);
-    }
-
+    m_Steppers.moveTo(start_pos);
+    runUntilFinished();
     // Both motors are now at position 0. Very Nice!
 }
 
 bool LeadScrewStepper::runAndCheck() const 
 {
   // if out of boundries, return false.
-  m_LeftStepper.run();
   m_RightStepper.run();
+  m_LeftStepper.run();
   long right = m_RightStepper.currentPosition();
   long left = m_LeftStepper.currentPosition();
   if(right < MAX_POS || right > START_POS || left < MAX_POS || left > START_POS)
@@ -61,44 +54,23 @@ bool LeadScrewStepper::runAndCheck() const
   return true;
 }
 
-bool LeadScrewStepper::runSpeedToPositionAndCheck() const 
-{
-  // if out of boundries, return false.
-  m_LeftStepper.runSpeedToPosition();
-  m_RightStepper.runSpeedToPosition();
-  long currentSteps = m_RightStepper.currentPosition(); // they are totally parallel.
-  if(currentSteps < MAX_POS || currentSteps > START_POS)
-  {
-    //PANIC
-    reset();
-    return false;
-  }
-  return true;
-}
-
 bool LeadScrewStepper::runUntilFinished() const
 {
-  while(m_LeftStepper.distanceToGo() != 0 && m_RightStepper.distanceToGo() != 0)
+  while (m_LeftStepper.distanceToGo() != 0 && m_RightStepper.distanceToGo() != 0)
   {
-    if(!runAndCheck())
+    if (!runAndCheck())
     {
-      Utils::serialPrintf("You stupid n-\n");
       return false;
     }
+    Serial.println(m_LeftStepper.speed());
+    delay(5);
   }
-  return true;
-}
-
-bool LeadScrewStepper::moveTo(const long pos) const
-{
-  m_LeftStepper.moveTo(pos);
-  m_RightStepper.moveTo(pos);
 }
 
 bool LeadScrewStepper::closeOnObj() const
 {
   int read;
-  moveTo(MAX_POS);
+  m_Steppers.moveTo(max_pos);
   while (m_LeftStepper.isRunning() || m_RightStepper.isRunning())
   {
     read = Utils::getFsrNewton();
@@ -106,8 +78,6 @@ bool LeadScrewStepper::closeOnObj() const
     if (!runAndCheck() || read >= 10) break;
     delay(5);
   }
-  m_LeftStepper.setSpeed(m_Rps);
-  m_RightStepper.setSpeed(m_Rps);
   return read >= 10;
 }
 
@@ -149,13 +119,11 @@ void LeadScrewStepper::checkBoundries() const
 {
   while(true)
   {
-    m_LeftStepper.runToNewPosition(MAX_POS);
+    m_Steppers.moveTo(max_pos);
+    runUntilFinished();
     delay(1000);
-    m_LeftStepper.runToNewPosition(START_POS);
-    delay(1000);
-    m_RightStepper.runToNewPosition(MAX_POS);
-    delay(1000);
-    m_RightStepper.runToNewPosition(START_POS);
+    m_Steppers.moveTo(start_pos);
+    runUntilFinished();
     delay(1000);
   }
 }
@@ -186,7 +154,8 @@ void LeadScrewStepper::checkServos() const
 
 void LeadScrewStepper::checkObjHandle() const
 {
-  moveTo(-1000);
+  long positions[2] = {-1000, -1000};
+  m_Steppers.moveTo(positions);
   runUntilFinished();
   delay(1000);
   pickUpObj();

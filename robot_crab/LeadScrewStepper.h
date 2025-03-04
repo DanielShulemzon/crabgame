@@ -11,13 +11,18 @@
 
 #include "globals.h"
 #include <AccelStepper.h>
+#include <MultiStepper.h>
 #include <Servo.h> 
 
 class LeadScrewStepper 
 {
 public:
   AccelStepper m_RightStepper, m_LeftStepper;
+  MultiStepper m_Steppers;
 private:
+  long start_pos[2] = {START_POS, START_POS};
+  long max_pos[2] = {MAX_POS, MAX_POS};
+
 
   Servo m_LeftServo, m_RightServo;
 
@@ -30,10 +35,6 @@ public:
   bool runAndCheck() const;
 
   bool runUntilFinished() const;
-
-  bool runSpeedToPositionAndCheck() const;
-
-  bool moveTo(const long pos) const;
 
   bool closeOnObj() const;
 
