@@ -8,13 +8,13 @@ LeadScrewStepper::LeadScrewStepper(const stepperLS& leftStepper, const stepperLS
      m_RightStepper(AccelStepper::DRIVER, rightStepper.step, rightStepper.dir) {
 
   m_LeftStepper.setCurrentPosition(START_POS);
-  m_LeftStepper.setMaxSpeed(1000);
-  m_LeftStepper.setAcceleration(500);
+  // m_LeftStepper.setMaxSpeed(1000);
+  // m_LeftStepper.setAcceleration(500);
   m_LeftStepper.setSpeed(m_Rps);
 
   m_RightStepper.setCurrentPosition(START_POS);
-  m_RightStepper.setMaxSpeed(1000);
-  m_RightStepper.setAcceleration(500);
+  // m_RightStepper.setMaxSpeed(1000);
+  // m_RightStepper.setAcceleration(500);
   m_RightStepper.setSpeed(m_Rps);
 
   m_Steppers = MultiStepper();
@@ -41,8 +41,7 @@ void LeadScrewStepper::reset() const
 bool LeadScrewStepper::runAndCheck() const 
 {
   // if out of boundries, return false.
-  m_RightStepper.run();
-  m_LeftStepper.run();
+  m_Steppers.runSpeedToPosition();
   long right = m_RightStepper.currentPosition();
   long left = m_LeftStepper.currentPosition();
   if(right < MAX_POS || right > START_POS || left < MAX_POS || left > START_POS)
@@ -62,8 +61,8 @@ bool LeadScrewStepper::runUntilFinished() const
     {
       return false;
     }
-    Serial.println(m_LeftStepper.speed());
-    delay(5);
+    // Serial.println(m_LeftStepper.speed());
+    delay(2);
   }
 }
 
@@ -76,7 +75,6 @@ bool LeadScrewStepper::closeOnObj() const
     read = Utils::getFsrNewton();
     // Utils::serialPrintf("1: %d 2: %d, also 2 moves to: %d\n", m_LeftStepper.currentPosition(), m_RightStepper.currentPosition(), m_LeftStepper.targetPosition());
     if (!runAndCheck() || read >= 10) break;
-    delay(5);
   }
   return read >= 10;
 }
@@ -93,7 +91,6 @@ void LeadScrewStepper::pickUpObj() const
     {
       Utils::serialPrintf("You stupid n-\n");
     }
-    delay(10);
   }
   runUntilFinished();
 }
@@ -110,7 +107,6 @@ void LeadScrewStepper::putDownObj() const
     {
       Utils::serialPrintf("You stupid n-\n");
     }
-    delay(10);
   }
   runUntilFinished();
 }
