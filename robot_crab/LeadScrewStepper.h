@@ -30,11 +30,10 @@ private:
 
 public:
   LeadScrewStepper(const stepperLS& leftStepper, const stepperLS& rightStepper, uint8_t serPin1, uint8_t serPin2);
+
   void reset() const;
 
-  bool runAndCheck() const;
-
-  bool runUntilFinished() const;
+  bool check() const;
 
   bool closeOnObj() const;
 
