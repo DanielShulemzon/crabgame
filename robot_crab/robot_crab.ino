@@ -23,7 +23,7 @@ void setup()
   //   stepperController->putDownObj();
   // }
 
-  stepperController->checkBoundries();
+  stepperController->checkObjHandle();
 }
 
 void loop() 
