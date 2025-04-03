@@ -21,11 +21,15 @@ bool LeadScrewStepper::closeOnObj() const
 {
   int read;
   m_Steppers.moveTo(MAX_POS);
-  while (m_Steppers.run())
+  while (m_Steppers.run() == IN_PROGRESS)
   {
     read = Utils::getFsrNewton();
     // Utils::serialPrintf("1: %d 2: %d, also 2 moves to: %d\n", m_LeftStepper.currentPosition(), m_RightStepper.currentPosition(), m_LeftStepper.targetPosition());
-    if (read >= 10) break;
+    if (read >= 10) 
+    {
+      m_Steppers.stop();
+      break;
+    }
   }
   return read >= 10;
 }
@@ -139,4 +143,15 @@ void LeadScrewStepper::checkObjHandle() const
   pickUpObj();
   delay(1000);
   putDownObj();
+}
+
+void LeadScrewStepper::checkForceSensor() const
+{
+  if (closeOnObj())
+  {
+    delay(1000);
+    pickUpObj();
+    delay(1000);
+    putDownObj();
+  }
 }

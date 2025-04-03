@@ -31,5 +31,7 @@ public:
 
   void checkServos() const;
 
-  void checkObjHandle() const;  
+  void checkObjHandle() const;
+
+  void checkForceSensor() const;
 };

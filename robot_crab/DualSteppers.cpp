@@ -15,6 +15,11 @@ void dualSteppers::reset() const
   runUntilFinished();
 }
 
+void dualSteppers::stop()
+{
+  m_TargetPosition = currentPosition();
+}
+
 void dualSteppers::setSpeed(float new_speed)
 {
   m_AbsSpeed = new_speed;

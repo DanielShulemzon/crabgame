@@ -23,9 +23,10 @@ void setup()
   //   stepperController->putDownObj();
   // }
 
-  stepperController->checkObjHandle();
+  stepperController->checkForceSensor();
 }
 
 void loop() 
-{ 
+{
+
 }

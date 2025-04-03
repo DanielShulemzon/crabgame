@@ -25,6 +25,8 @@ public:
 
   void reset() const;
 
+  void stop();
+
   void setSpeed(float new_speed);
 
   void moveTo(long position);
