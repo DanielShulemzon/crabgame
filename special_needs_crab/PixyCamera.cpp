@@ -3,13 +3,23 @@
 
 double PixyCamera::getAngle(Block *block) 
 {
-  return atan((block->m_x - (CAM_PIXELS / 2)) * 158 * sqrt(3)) * 180 / PI;
+  // see explaination in docos.
+  return atan((block->m_x - (pixy.frameWidth / 2)) * pixy.frameWidth * sqrt(3)) * 180 / PI;
+}
+
+double PixyCamera::getDistanceFromPixy(Block *block) 
+{
+  // see explaination in docos.
+  double screenWidth = (double) pixy.frameWidth / block->m_width * BOX_OG_WIDTH;
+  return screenWidth / 2 * sqrt(3);
 }
 
 double PixyCamera::getDistance(Block *block) 
 {
-  double screenWidth = (double) CAM_PIXELS / block->m_width * BOX_OG_PIXELS;
-  return screenWidth / 2 * sqrt(3);
+  // see explaination in docos.
+  double distFromPixy = PixyCamera::getDistanceFromPixy(block);
+  double vertDist = sqrt(distFromPixy*distFromPixy - PIXY_HEIGHT*PIXY_HEIGHT);
+  return vertDist - PIXY_DIST_FROM_FRONT;
 }
 
 // Take the biggest block (of the correct color signature) that's been around for at least 10 frames
@@ -24,7 +34,7 @@ int16_t PixyCamera::getPrimaryObjId()
     if (pixy.ccc.blocks[i].m_signature == OBJ_COLOR_SIGNATURE) {
       if (pixy.ccc.blocks[i].m_age>30)
         return pixy.ccc.blocks[0].m_index;
-      else return -1;
+      else return -1; // not a bug, a feature.
     }
   }
   return -1;

@@ -20,9 +20,12 @@ extern LeadScrewStepper* stepperController;
 extern Pixy2 pixy;
 
 namespace MainLoop {
-  bool holding_obj = false;
-  static int16_t blockIdx = -1;
-  State state = LOOKING_FOR_OBJ;
+  extern bool holding_obj;
+  extern int16_t blockIdx;
+  extern State state;
+  extern Block* currBlock;
 
   void main_loop();
+
+  bool moveToBlock(double dist = 20);
 };

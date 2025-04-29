@@ -6,7 +6,7 @@
 
 void Utils::serialPrintf(const char *format, ...) 
 {
-  static char buffer[100]; // good
+  static char buffer[128]; // good
   va_list args;
   
   va_start(args, format);
@@ -38,5 +38,17 @@ int Utils::getFsrNewton()
   }
 
   return (int)fsrForce;  // Cast to int if you need integer return
+}
+
+float Ultrasonic::getDistanceCm() const
+{
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  long duration = pulseIn(echoPin, HIGH);
+  return duration * 0.0343f / 2.0f; 
 }
 

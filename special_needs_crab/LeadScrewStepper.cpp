@@ -2,7 +2,7 @@
 #include "utils.h"
 
 
-LeadScrewStepper::LeadScrewStepper(const stepperLS& leftStepper, const stepperLS& rightStepper,
+LeadScrewStepper::LeadScrewStepper(const StepperLS& leftStepper, const StepperLS& rightStepper,
                                     uint8_t leftServoPin, uint8_t rightServoPin) :
       m_LeftStepper(AccelStepper::DRIVER, leftStepper.step, leftStepper.dir),
       m_RightStepper(AccelStepper::DRIVER, rightStepper.step, rightStepper.dir),
@@ -25,13 +25,13 @@ bool LeadScrewStepper::closeOnObj() const
   {
     read = Utils::getFsrNewton();
     // Utils::serialPrintf("1: %d 2: %d, also 2 moves to: %d\n", m_LeftStepper.currentPosition(), m_RightStepper.currentPosition(), m_LeftStepper.targetPosition());
-    if (read >= 10) 
+    if (read >= 5) 
     {
       m_Steppers.stop();
       break;
     }
   }
-  return read >= 10;
+  return read >= 5;
 }
 
 void LeadScrewStepper::pickUpObj() const

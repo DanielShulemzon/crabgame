@@ -1,14 +1,14 @@
 #pragma once
 
 #define DEFAULT_SPEED 200
-#define DEFAULT_SLOW_SPEED 60
+#define DEFAULT_SLOW_SPEED 40
 
 #include "globals.h"
 
 class MotorController 
 {
 private:
-  const motor *m_Motors = ::motors; // motors[i] where i: 0 - lb, 1 - rb, 2 - rf, 3 - lf
+  const Motor *m_Motors = ::motors; // motors[i] where i: 0 - lb, 1 - rb, 2 - rf, 3 - lf
   uint8_t m_BaseSpeed = DEFAULT_SPEED;
   uint8_t m_SlowSpeed = DEFAULT_SLOW_SPEED;
 

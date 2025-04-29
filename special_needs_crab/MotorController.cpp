@@ -57,13 +57,12 @@ void MotorController::moveAtAngle(const double angle, uint8_t dir = 0) const
 
 void MotorController::spinAroundObj(const uint8_t radius = 20) const
 {
-  // default radius of 20 cms, can be changed.
-  int speedDx = 50 - radius;
+  int speedDx = 40;
   int16_t motorSpeed[4] = {0}; //the speed going to be inputed into each motor
 
-  // default move right values (can see further explanation at MotorController::moveAtAngle) plus moment.
+  // default move right values (can see further explanation at MhotorController::moveAtAngle) plus moment.
   motorSpeed[3] = - (m_SlowSpeed) + speedDx;
-  motorSpeed[0] =  (m_SlowSpeed) + speedDx; // if big values i mad ):<
+  motorSpeed[0] =  (m_SlowSpeed) + speedDx;
   motorSpeed[1] =  (m_SlowSpeed) + speedDx;
   motorSpeed[2] = - (m_SlowSpeed) + speedDx;
 
@@ -88,7 +87,6 @@ void MotorController::spinInPlace(const uint8_t speed = DEFAULT_SLOW_SPEED) cons
     digitalWrite(m_Motors[i].in2, 0);
   }
 }
-
 
 void MotorController::checkWheels() const 
 {

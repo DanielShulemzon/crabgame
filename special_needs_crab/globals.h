@@ -6,20 +6,29 @@
 
 #define MATH_PI 3.14159265358979
 
-struct motor {
+struct Motor {
     uint8_t in1;
     uint8_t in2;
     uint8_t pwm;
 };
 
-extern const motor motors[4];
+extern const Motor motors[4];
 
-struct stepperLS {
+struct StepperLS {
     uint8_t dir;
     uint8_t step;
 };
 
-extern const stepperLS leftStepper, rightStepper;
+extern const StepperLS leftStepper, rightStepper;
+
+struct Ultrasonic {
+  uint8_t trigPin;
+  uint8_t echoPin;
+  // defined in utils.cpp.
+  float getDistanceCm() const;
+};
+
+extern const Ultrasonic frontUltrasonic;
 
 extern const uint8_t leftServoPin, rightServoPin;
 
