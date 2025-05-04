@@ -3,21 +3,25 @@
 
 double PixyCamera::getAngle(Block *block) 
 {
-  // see explaination in docos.
-  return atan((block->m_x - (pixy.frameWidth / 2)) * pixy.frameWidth * sqrt(3)) * 180 / PI;
+  double dx = static_cast<double>(block->m_x) - (static_cast<double>(pixy.frameWidth) / 2.0);
+
+  const double FOV = 75;
+  double anglePerPixel = FOV / static_cast<double>(pixy.frameWidth);
+
+  return dx * anglePerPixel;
 }
 
 double PixyCamera::getDistanceFromPixy(Block *block) 
 {
   // see explaination in docos.
-  double screenWidth = (double) pixy.frameWidth / block->m_width * BOX_OG_WIDTH;
-  return screenWidth / 2 * sqrt(3);
+  double screenWidth = static_cast<double>(pixy.frameWidth) / block->m_width * BOX_OG_WIDTH;
+  return screenWidth / 2.0 * sqrt(3);
 }
 
-double PixyCamera::getDistance(Block *block) 
+double PixyCamera::getDistanceFromRobot(Block *block) 
 {
   // see explaination in docos.
-  double distFromPixy = PixyCamera::getDistanceFromPixy(block);
+  double distFromPixy = getDistanceFromPixy(block);
   double vertDist = sqrt(distFromPixy*distFromPixy - PIXY_HEIGHT*PIXY_HEIGHT);
   return vertDist - PIXY_DIST_FROM_FRONT;
 }
@@ -40,7 +44,7 @@ int16_t PixyCamera::getPrimaryObjId()
   return -1;
 }
 
-Block* PixyCamera::trackBlock(uint8_t index)
+Block* PixyCamera::trackBlock(int16_t index)
 {
   uint8_t i;
 
@@ -51,4 +55,18 @@ Block* PixyCamera::trackBlock(uint8_t index)
   }
 
   return NULL;
+}
+
+
+void PixyCamera::debugPixy()
+{
+  pixy.ccc.getBlocks();
+
+  int16_t objId = getPrimaryObjId();
+  if (objId == -1) {
+    Serial.println("No consistant obj was found.");
+  } else {
+    Block* b = trackBlock(objId);
+    b->print();
+  }
 }

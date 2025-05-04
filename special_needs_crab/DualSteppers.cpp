@@ -48,7 +48,7 @@ RunResult DualSteppers::run() const
   } else if (!reachedPosition()) {
     steppers[0]->runSpeed();
     steppers[1]->runSpeed();
-    Serial.println(currentPosition());
+    // Serial.println(currentPosition());
   } else {
     return REACHED_TARGET;
   }

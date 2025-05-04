@@ -1,3 +1,4 @@
+#include "PixyCamera.h"
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,10 +38,46 @@ int Utils::getFsrNewton()
     fsrForce = (fsrConductance - 1000.0f) / 30.0f;
   }
 
-  return (int)fsrForce;  // Cast to int if you need integer return
+  return (int)fsrForce;
 }
 
-float Ultrasonic::getDistanceCm() const
+
+bool Utils::matchingDistance(const double read1, const double read2)
+{
+  static uint8_t diff = 5;
+  return abs(read1 - read2) >= diff;
+}
+
+void Utils::testPixyUltrasonicError()
+{
+  double ultrasonicDist, pixyDist;
+  while (true)
+  {
+    ultrasonicDist = frontUltrasonic.getDistanceFromRobot();
+
+    pixy.ccc.getBlocks();
+    if (pixy.ccc.numBlocks)
+    {
+      pixyDist = PixyCamera::getDistanceFromRobot(&pixy.ccc.blocks[0]);
+      Serial.print("front ultrasonic shows: ");
+      Serial.print(ultrasonicDist);
+      Serial.print(", pixy shows: ");
+      Serial.print(pixyDist);
+      Serial.print(", error: ");
+      Serial.println(ultrasonicDist - pixyDist);
+      delay(1000);
+    } else {
+      Serial.print("front ultrasonic shows: ");
+      Serial.print(ultrasonicDist);
+      Serial.println(", pixy did not find any blocks.");
+      delay(1000);
+      continue;
+    }
+  }
+
+}
+
+double Ultrasonic::getDistanceFromSensor() const
 {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -49,6 +86,27 @@ float Ultrasonic::getDistanceCm() const
   digitalWrite(trigPin, LOW);
 
   long duration = pulseIn(echoPin, HIGH);
-  return duration * 0.0343f / 2.0f; 
+  return duration * SPEED_OF_SOUND_CM_PER_US / 2.0; 
 }
 
+double Ultrasonic::getDistanceFromRobot() const
+{
+  return getDistanceFromSensor() - ULTRASONIC_DIST_FROM_ROBOT;
+}
+
+void Ultrasonic::setup() const
+{
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void Ultrasonic::test() const
+{
+  while (true)
+  {
+    double dist = getDistanceFromRobot();
+    Serial.print("Ultrasonic sensor shows: ");
+    Serial.println(dist);
+    delay(100);
+  }
+}

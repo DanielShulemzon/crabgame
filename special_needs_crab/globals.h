@@ -4,7 +4,8 @@
 
 #define SECOND_MS 1000
 
-#define MATH_PI 3.14159265358979
+#define SPEED_OF_SOUND_CM_PER_US 0.0343
+#define ULTRASONIC_DIST_FROM_ROBOT 5
 
 struct Motor {
     uint8_t in1;
@@ -25,7 +26,10 @@ struct Ultrasonic {
   uint8_t trigPin;
   uint8_t echoPin;
   // defined in utils.cpp.
-  float getDistanceCm() const;
+  void setup() const;
+  double getDistanceFromSensor() const;
+  double getDistanceFromRobot() const;
+  void test() const;
 };
 
 extern const Ultrasonic frontUltrasonic;

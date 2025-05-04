@@ -1,8 +1,8 @@
 #pragma once
 
-#define BOX_OG_WIDTH 10
-#define PIXY_HEIGHT 30
-#define PIXY_DIST_FROM_FRONT 18
+#define BOX_OG_WIDTH 10.0
+#define PIXY_HEIGHT 30.0
+#define PIXY_DIST_FROM_FRONT 18.0
 
 #include "globals.h"
 #include <Pixy2.h>
@@ -21,11 +21,13 @@ namespace PixyCamera {
 
   double getDistanceFromPixy(Block* block);
 
-  double getDistance(Block* block);
+  double getDistanceFromRobot(Block* block);
 
   int16_t getPrimaryObjId();
 
-  Block* trackBlock(uint8_t index);
+  Block* trackBlock(int16_t index);
 
   // *Block getTargetDest();
+
+  void debugPixy();
 }

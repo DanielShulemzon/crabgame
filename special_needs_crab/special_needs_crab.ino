@@ -13,14 +13,27 @@ Pixy2 pixy;
 void setup()
 {
   Serial.begin(9600);
-  // pixy.init();
-  // pixy.setLamp(1, 0);
-  stepperController = &LeadScrewStepper(leftStepper, rightStepper, leftServoPin, rightServoPin);
 
+  frontUltrasonic.setup();
+
+  delay(50);
+  pixy.init();
+  pixy.setLamp(1, 0);
+
+  static LeadScrewStepper stepper(leftStepper, rightStepper, leftServoPin, rightServoPin);
+  stepperController = &stepper;
+
+  // frontUltrasonic.test();
   // stepperController->checkForceSensor();
+  // motorController.spinAroundObj();
+  // Utils::testPixyUltrasonicError();
+  MainLoop::approachObj();
+  delay(1000);
+  Serial.println("test");
+  stepperController->checkForceSensor();
 }
 
 void loop() 
 {
-  MainLoop::main_loop();
+  // MainLoop::main_loop();
 }

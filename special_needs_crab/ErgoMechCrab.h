@@ -27,5 +27,13 @@ namespace MainLoop {
 
   void main_loop();
 
-  bool moveToBlock(double dist = 20);
+  bool moveToObj(double dist = 20);
+
+  bool fixRobotOrientation();
+  
+  bool approachObj();
+
+  void spinToObj();
+
+  void cheer();
 };

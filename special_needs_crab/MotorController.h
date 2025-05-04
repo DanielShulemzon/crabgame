@@ -1,7 +1,7 @@
 #pragma once
 
-#define DEFAULT_SPEED 200
-#define DEFAULT_SLOW_SPEED 40
+#define DEFAULT_SPEED 60
+#define DEFAULT_SLOW_SPEED 30
 
 #include "globals.h"
 
@@ -19,13 +19,13 @@ public:
   
   void resetMotors() const;
   
-  void setSpeed(const uint8_t speed);
+  void setSpeed(uint8_t speed);
 
-  void moveAtAngle(const double angle, uint8_t dir = 0) const;
+  void moveAtAngle(double angle, uint8_t dir = 0) const;
 
-  void spinAroundObj(const uint8_t radius = 20) const;
+  void spinAroundObj(uint8_t radius = 20) const;
 
-  void spinInPlace(const uint8_t speed = DEFAULT_SLOW_SPEED) const;
+  void spinInPlace(bool clockwise = false, uint8_t speed = DEFAULT_SLOW_SPEED) const;
 
   void checkWheels() const;
 
