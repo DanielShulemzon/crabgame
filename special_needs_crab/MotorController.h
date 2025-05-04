@@ -1,7 +1,7 @@
 #pragma once
 
 #define DEFAULT_SPEED 60
-#define DEFAULT_SLOW_SPEED 30
+#define DEFAULT_SLOW_SPEED 40
 
 #include "globals.h"
 

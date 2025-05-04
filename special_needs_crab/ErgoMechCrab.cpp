@@ -95,18 +95,17 @@ bool MainLoop::moveToObj(double dist = 20)
 
   spinToObj();
 
-  motorController.resetMotors();
   delay(1000);
   // go to ball
   while (true)
   {
     pixy.ccc.getBlocks();
-    currBlock = PixyCamera::trackBlock(blockIdx);
-    if (!currBlock) {
+    if (!pixy.ccc.numBlocks) {
       // lost ball
       motorController.resetMotors();
       return false;
     }
+    currBlock = &pixy.ccc.blocks[0];
 
     angle = PixyCamera::getAngle(currBlock);
     motorController.moveAtAngle(angle);
@@ -166,7 +165,7 @@ bool MainLoop::fixRobotOrientation()
 bool MainLoop::approachObj()
 {
   double ultrasonicRead;
-  motorController.setSpeed(40); // temporary
+  motorController.setSpeed(60); // temporary
   motorController.moveAtAngle(0);
   while ((ultrasonicRead = frontUltrasonic.getDistanceFromRobot()) > 0.5)
   {
@@ -187,25 +186,27 @@ bool MainLoop::approachObj()
 void MainLoop::spinToObj()
 {
   double angle;
-  pixy.ccc.getBlocks();
-  if (!pixy.ccc.numBlocks) return;
+
   blockIdx = pixy.ccc.blocks[0].m_index;
 
   do {
     pixy.ccc.getBlocks();
-    currBlock = PixyCamera::trackBlock(blockIdx);
-    if (!currBlock)
+    if (!pixy.ccc.numBlocks)
     {
       // lost ball
-      return false;
+      motorController.resetMotors();
+      return;
     }
     else
     {
+      currBlock = &pixy.ccc.blocks[0];
       angle = PixyCamera::getAngle(currBlock);
       bool dir = angle > 0;
       motorController.spinInPlace(dir);
     }
   } while (abs(angle) > 2);
+  blockIdx = currBlock->m_index;
+  motorController.resetMotors();
 }
 
 void MainLoop::cheer()

@@ -27,13 +27,10 @@ void setup()
   // stepperController->checkForceSensor();
   // motorController.spinAroundObj();
   // Utils::testPixyUltrasonicError();
-  MainLoop::approachObj();
-  delay(1000);
-  Serial.println("test");
-  stepperController->checkForceSensor();
+  // stepperController->checkForceSensor();
 }
 
 void loop() 
 {
-  // MainLoop::main_loop();
+  MainLoop::main_loop();
 }
