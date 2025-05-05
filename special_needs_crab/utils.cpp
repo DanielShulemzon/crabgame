@@ -44,7 +44,7 @@ int Utils::getFsrNewton()
 
 bool Utils::matchingDistance(const double read1, const double read2)
 {
-  static uint8_t diff = 5;
+  static uint8_t diff = 2;
   return abs(read1 - read2) >= diff;
 }
 
@@ -58,7 +58,7 @@ void Utils::testPixyUltrasonicError()
     pixy.ccc.getBlocks();
     if (pixy.ccc.numBlocks)
     {
-      pixyDist = PixyCamera::getDistanceFromRobot(&pixy.ccc.blocks[0]);
+      pixyDist = PixyCamera::getDistanceFromRobot(&pixy.ccc.blocks[0], &objects[0]);
       Serial.print("front ultrasonic shows: ");
       Serial.print(ultrasonicDist);
       Serial.print(", pixy shows: ");

@@ -27,7 +27,6 @@ void setup()
   // stepperController->checkForceSensor();
   // motorController.spinAroundObj();
   // Utils::testPixyUltrasonicError();
-  // stepperController->checkForceSensor();
 }
 
 void loop() 

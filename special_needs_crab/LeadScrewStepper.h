@@ -19,7 +19,7 @@ private:
   Servo m_LeftServo, m_RightServo;
 
 public:
-  LeadScrewStepper(const StepperLS& leftStepper, const StepperLS& rightStepper, uint8_t serPin1, uint8_t serPin2); \
+  LeadScrewStepper(const StepperLS& leftStepper, const StepperLS& rightStepper, uint8_t serPin1, uint8_t serPin2);
 
   bool closeOnObj() const;
 

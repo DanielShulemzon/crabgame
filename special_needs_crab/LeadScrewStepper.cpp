@@ -25,7 +25,7 @@ bool LeadScrewStepper::closeOnObj() const
   {
     read = Utils::getFsrNewton();
     // Utils::serialPrintf("1: %d 2: %d, also 2 moves to: %d\n", m_LeftStepper.currentPosition(), m_RightStepper.currentPosition(), m_LeftStepper.targetPosition());
-    if (read >= 5) 
+    if (read >= 10) 
     {
       m_Steppers.stop();
       break;

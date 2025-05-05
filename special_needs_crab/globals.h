@@ -7,11 +7,6 @@
 #define SPEED_OF_SOUND_CM_PER_US 0.0343
 #define ULTRASONIC_DIST_FROM_ROBOT 5
 
-struct Object {
-  uint8_t signature;
-  uint8_t width;
-};
-
 struct Motor {
   uint8_t in1;
   uint8_t in2;

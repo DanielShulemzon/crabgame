@@ -9,7 +9,9 @@ enum State
 {
   // looking for obj
   LOOKING_FOR_OBJ,
-  // going towards an obj and picking it
+  // getting closer to obj
+  MOVING_TO_OBJ,
+  // approaching obj and picking it
   PICKING_OBJ_STAGE,
   // finding a destination and placing it
   PLACING_OBJ_STAGE,
@@ -24,6 +26,7 @@ namespace MainLoop {
   extern int16_t blockIdx;
   extern State state;
   extern Block* currBlock;
+  extern ObjectData* currObjData;
 
   void main_loop();
 

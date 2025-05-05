@@ -8,6 +8,7 @@ namespace MainLoop {
   static int16_t blockIdx = -1;
   State state = LOOKING_FOR_OBJ;
   Block* currBlock;
+  ObjectData* currObjData;
 }
 
 // algorithm:
@@ -21,20 +22,33 @@ void MainLoop::main_loop()
   switch (state)
   {
     case LOOKING_FOR_OBJ:
-      pixy.ccc.getBlocks();
-      if ((blockIdx = PixyCamera::getPrimaryObjId()) != -1)
+      while (true)
       {
-        // found out object
-        currBlock = PixyCamera::trackBlock(blockIdx);
-        motorController.resetMotors();
-        state = PICKING_OBJ_STAGE;
-      }
-      else {
-        motorController.spinInPlace();
+        pixy.ccc.getBlocks();
+        if ((blockIdx = PixyCamera::getPrimaryObjId()) != -1)
+        {
+          // found out object
+          currBlock = PixyCamera::trackBlock(blockIdx);
+          currObjData = &objects[currBlock->m_signature - 1];
+
+          motorController.resetMotors();
+          
+          double pixyRead = PixyCamera::getDistanceFromRobot(currBlock, currObjData);
+          double ultrasonicRead = frontUltrasonic.getDistanceFromRobot();
+          
+          if (pixyRead < 20 || ultrasonicRead < 20)
+            state = PICKING_OBJ_STAGE;
+          else
+            state = MOVING_TO_OBJ;
+          break;
+        }
+        else {
+          motorController.spinInPlace();
+        }
       }
       break;
 
-    case PICKING_OBJ_STAGE:
+    case MOVING_TO_OBJ:
       // this part is blocking.
       delay(1000);
 
@@ -45,6 +59,11 @@ void MainLoop::main_loop()
         state = LOOKING_FOR_OBJ;
         break;
       }
+
+      state = PICKING_OBJ_STAGE;
+      break;
+
+    case PICKING_OBJ_STAGE:
       delay(1000);
 
       // orient the robot to face the object.
@@ -105,12 +124,12 @@ bool MainLoop::moveToObj(double dist = 20)
       motorController.resetMotors();
       return false;
     }
-    currBlock = &pixy.ccc.blocks[0];
+    currBlock = PixyCamera::getBiggestOfSignature(currObjData->signature);
 
     angle = PixyCamera::getAngle(currBlock);
     motorController.moveAtAngle(angle);
 
-    pixyRead = PixyCamera::getDistanceFromRobot(currBlock);
+    pixyRead = PixyCamera::getDistanceFromRobot(currBlock, currObjData);
     ultrasonicRead = frontUltrasonic.getDistanceFromRobot();
     
     if (pixyRead < 20 || ultrasonicRead < 20)
@@ -141,9 +160,9 @@ bool MainLoop::fixRobotOrientation()
       // lost ball
       return false;
     }
-    currBlock = &pixy.ccc.blocks[0];
+    currBlock = PixyCamera::getBiggestOfSignature(currObjData->signature);;
 
-    double pixyRead = PixyCamera::getDistanceFromRobot(currBlock);
+    double pixyRead = PixyCamera::getDistanceFromRobot(currBlock, currObjData);
     double ultrasonicRead = frontUltrasonic.getDistanceFromRobot();
     if (Utils::matchingDistance(pixyRead, ultrasonicRead))
     {
@@ -186,20 +205,22 @@ bool MainLoop::approachObj()
 void MainLoop::spinToObj()
 {
   double angle;
-
-  blockIdx = pixy.ccc.blocks[0].m_index;
+  uint8_t count;
 
   do {
     pixy.ccc.getBlocks();
     if (!pixy.ccc.numBlocks)
     {
       // lost ball
-      motorController.resetMotors();
-      return;
+      count++;
+      if (count > 5) {
+        motorController.resetMotors();
+        return;
+      }
     }
     else
     {
-      currBlock = &pixy.ccc.blocks[0];
+      currBlock = PixyCamera::getBiggestOfSignature(currObjData->signature);
       angle = PixyCamera::getAngle(currBlock);
       bool dir = angle > 0;
       motorController.spinInPlace(dir);
@@ -212,7 +233,9 @@ void MainLoop::spinToObj()
 void MainLoop::cheer()
 {
   while (true) {
-    stepperController->pickUpObj();
     stepperController->putDownObj();
+    delay(1000);
+    stepperController->pickUpObj();
+    delay(1000);
   }
 }
